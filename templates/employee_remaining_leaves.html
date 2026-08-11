@@ -1,0 +1,84 @@
+{% if session['position'] == 'manager' %}
+    {% extends "manager_dashboard.html" %}
+{% elif session['position'] == 'hr' %}
+    {% extends "hr_dashboard.html" %}
+{% elif session['position'] == 'supermanager' %}
+    {% extends "supermanager_dashboard.html" %}
+{% else %}
+    {% extends "employee_dashboard.html" %}
+{% endif %}
+
+{% block title %}Remaining Leave Balance{% endblock %}
+{% block content %}
+
+<style>
+    .balance-container {
+        width: 100%;
+        margin: 0 auto;
+        background-color: white;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .balance-container h3 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .balance-container table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+    }
+
+    .balance-container th {
+        background-color: #FFD700;
+        color: black;
+        padding: 12px;
+    }
+
+    .balance-container td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .balance-container tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .balance-container tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+</style>
+<a href="{{ url_for('employee_leaves') }}" class="back-link">&larr; Back to Leave Dashboard</a>
+
+
+<div class="balance-container">
+    <h3>Remaining Leave Balance</h3>
+
+    <table>
+        <tr>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Casual Leave</th>
+            <th>Sick Leave</th>
+            <th>Earned Leave</th>
+        </tr>
+
+        {% for row in data %}
+        <tr>
+            <td>{{ row.employeeid }}</td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.department }}</td>
+            <td>{{ row.casual_remaining }} / {{ row.casual_total }}</td>
+            <td>{{ row.sick_remaining }} / {{ row.sick_total }}</td>
+            <td>{{ row.earned_remaining }} / {{ row.earned_total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

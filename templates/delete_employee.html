@@ -1,0 +1,72 @@
+{% extends "hr_dashboard.html" %}
+
+{% block title %}Manage Employees{% endblock %}
+
+{% block content %}
+
+<h2>Manage Employees</h2>
+
+{% with messages = get_flashed_messages() %}
+{% for msg in messages %}
+<p class="flash" style="color:red;">{{ msg }}</p>
+{% endfor %}
+{% endwith %}
+
+<script>
+    // Auto-hide after 5 seconds
+    setTimeout(function () {
+        let flashes = document.querySelectorAll('.flash');
+        flashes.forEach(function (flash) {
+            flash.style.opacity = '0';
+            setTimeout(() => flash.remove(), 500); // remove after fade
+        });
+    }, 5000);
+</script>
+
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Employee ID</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for emp in employees %}
+        <tr>
+            <td>{{ emp.name }}</td>
+            <td>{{ emp.employeeid }}</td>
+            <td>
+                {% if emp.is_active %}
+                <span style="color:green;">Active</span>
+                {% else %}
+                <span style="color:gray;">Inactive</span>
+                {% endif %}
+            </td>
+            <td>
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="employeeid" value="{{ emp.employeeid }}">
+                    {% if emp.is_active %}
+                    <input type="hidden" name="action" value="deactivate">
+                    <button type="submit" onclick="return confirm('Deactivate {{ emp.name }}?');">
+                        Deactivate
+                    </button>
+                    {% else %}
+                    <input type="hidden" name="action" value="activate">
+                    <button type="submit" style="background-color:red; color:white; border:none; padding:5px 10px;"
+                        onclick="return confirm('Reactivate {{ emp.name }}?');">
+                        Reactivate
+                    </button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+<a href="{{ url_for('hr_dashboard') }}">Back to Dashboard</a>
+
+{% endblock %}

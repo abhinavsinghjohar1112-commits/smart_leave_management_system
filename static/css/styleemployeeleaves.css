@@ -1,0 +1,304 @@
+/* =========================================================
+Employee Leave Dashboard
+Professional & Simple Theme
+========================================================= */
+
+* {
+  box-sizing: border-box;
+  }
+
+:root {
+--primary: #2563eb;
+--primary-dark: #1d4ed8;
+--background: #f5f7fb;
+--card: #ffffff;
+--border: #e5e7eb;
+--text: #1f2937;
+--muted: #6b7280;
+
+
+--pending-bg: #fef3c7;
+--pending-text: #92400e;
+
+--approved-bg: #dcfce7;
+--approved-text: #166534;
+
+--rejected-bg: #fee2e2;
+--rejected-text: #991b1b;
+
+
+}
+
+/* =========================================================
+Page
+========================================================= */
+
+.leave-page {
+min-height: 100vh;
+width: 100%;
+background: var(--background);
+padding: 35px 20px 50px;
+font-family: Arial, Helvetica, sans-serif;
+color: var(--text);
+}
+
+/* =========================================================
+Main Container
+========================================================= */
+
+.leave-container {
+width: 100%;
+max-width: 1100px;
+margin: 0 auto;
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: 12px;
+padding: 30px;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+/* =========================================================
+Header
+========================================================= */
+
+.page-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 20px;
+padding-bottom: 22px;
+margin-bottom: 25px;
+border-bottom: 1px solid var(--border);
+}
+
+.page-header h2 {
+margin: 0 0 6px;
+font-size: 28px;
+font-weight: 700;
+color: var(--text);
+}
+
+.page-header p {
+margin: 0;
+color: var(--muted);
+font-size: 14px;
+}
+
+/* =========================================================
+Apply Leave Button
+========================================================= */
+
+.apply-btn {
+display: inline-block;
+background: var(--primary);
+color: white;
+text-decoration: none;
+padding: 11px 20px;
+border-radius: 7px;
+font-size: 14px;
+font-weight: 600;
+transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.apply-btn:hover {
+background: var(--primary-dark);
+transform: translateY(-1px);
+}
+
+/* =========================================================
+Table
+========================================================= */
+
+.table-wrapper {
+width: 100%;
+overflow-x: auto;
+border: 1px solid var(--border);
+border-radius: 8px;
+}
+
+table {
+width: 100%;
+min-width: 700px;
+border-collapse: collapse;
+background: white;
+}
+
+thead {
+background: #f8fafc;
+}
+
+th {
+padding: 14px 15px;
+text-align: left;
+font-size: 13px;
+font-weight: 700;
+color: #374151;
+border-bottom: 1px solid var(--border);
+white-space: nowrap;
+}
+
+td {
+padding: 14px 15px;
+font-size: 14px;
+color: #4b5563;
+border-bottom: 1px solid var(--border);
+}
+
+tbody tr:last-child td {
+border-bottom: none;
+}
+
+tbody tr:hover {
+background: #f9fafb;
+}
+
+/* =========================================================
+Status
+========================================================= */
+
+.status {
+display: inline-block;
+padding: 5px 11px;
+border-radius: 20px;
+font-size: 12px;
+font-weight: 600;
+}
+
+.status-pending {
+background: var(--pending-bg);
+color: var(--pending-text);
+}
+
+.status-approved {
+background: var(--approved-bg);
+color: var(--approved-text);
+}
+
+.status-rejected,
+.status-cancelled {
+background: var(--rejected-bg);
+color: var(--rejected-text);
+}
+
+/* =========================================================
+Cancel Button
+========================================================= */
+
+.cancel-btn {
+display: inline-block;
+padding: 6px 13px;
+border: 1px solid #dc2626;
+border-radius: 6px;
+color: #dc2626;
+background: white;
+text-decoration: none;
+font-size: 12px;
+font-weight: 600;
+transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+background: #dc2626;
+color: white;
+}
+
+.no-action {
+color: #9ca3af;
+}
+
+/* =========================================================
+Empty State
+========================================================= */
+
+.empty-state {
+text-align: center;
+padding: 35px 20px;
+color: var(--muted);
+font-size: 14px;
+}
+
+/* =========================================================
+Bottom Actions
+========================================================= */
+
+.bottom-actions {
+display: flex;
+justify-content: center;
+margin-top: 25px;
+}
+
+.balance-btn {
+display: inline-block;
+padding: 11px 20px;
+border: 1px solid var(--primary);
+border-radius: 7px;
+color: var(--primary);
+background: white;
+text-decoration: none;
+font-size: 14px;
+font-weight: 600;
+transition: all 0.2s ease;
+}
+
+.balance-btn:hover {
+background: var(--primary);
+color: white;
+}
+
+/* =========================================================
+Back Link
+========================================================= */
+
+.back-link {
+display: inline-block;
+margin-top: 25px;
+color: var(--muted);
+text-decoration: none;
+font-size: 14px;
+transition: color 0.2s ease;
+}
+
+.back-link:hover {
+color: var(--primary);
+}
+
+/* =========================================================
+Responsive
+========================================================= */
+
+@media (max-width: 700px) {
+
+
+.leave-page {
+    padding: 20px 12px 40px;
+}
+
+.leave-container {
+    padding: 20px 15px;
+}
+
+.page-header {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.page-header h2 {
+    font-size: 24px;
+}
+
+.apply-btn {
+    width: 100%;
+    text-align: center;
+}
+
+.bottom-actions {
+    width: 100%;
+}
+
+.balance-btn {
+    width: 100%;
+    text-align: center;
+}
+
+
+}

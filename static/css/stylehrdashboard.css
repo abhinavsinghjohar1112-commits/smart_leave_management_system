@@ -1,0 +1,324 @@
+/* ============================================================
+   HR Dashboard Stylesheet
+   ============================================================ */
+
+:root {
+  --ink: #1c2430;
+  --ink-soft: #566178;
+  --paper: #f5f6f8;
+  --panel: #ffffff;
+  --sidebar-bg: #10192b;
+  --sidebar-text: #c4cbdb;
+  --sidebar-text-dim: #7c869c;
+  --accent: #3d6bff;
+  --accent-soft: #eaf0ff;
+  --border: #e3e6ec;
+  --success: #1f8a4c;
+  --success-bg: #e7f7ee;
+  --error: #c0392b;
+  --error-bg: #fdecea;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(16, 25, 43, 0.06), 0 8px 24px rgba(16, 25, 43, 0.04);
+  --font-body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-head: "Sora", "Inter", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------------- Flash messages ---------------- */
+
+#flash-container {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 340px;
+}
+
+.flash {
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: var(--shadow);
+  border-left: 4px solid transparent;
+  background: var(--panel);
+  color: var(--ink);
+}
+
+.flash.success {
+  background: var(--success-bg);
+  border-left-color: var(--success);
+  color: var(--success);
+}
+
+.flash.error,
+.flash.danger {
+  background: var(--error-bg);
+  border-left-color: var(--error);
+  color: var(--error);
+}
+
+.flash.info {
+  background: var(--accent-soft);
+  border-left-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ---------------- Dashboard layout ---------------- */
+
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---------------- Sidebar ---------------- */
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  padding: 28px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar h2 {
+  font-family: var(--font-head);
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin: 0 0 24px 8px;
+}
+
+.sidebar h4 {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sidebar-text-dim);
+  font-weight: 600;
+  margin: 20px 8px 8px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  color: var(--sidebar-text);
+  transition: background 0.15s ease, color 0.15s ease, padding-left 0.15s ease;
+}
+
+.sidebar a:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  padding-left: 16px;
+}
+
+.sidebar a:active {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.sidebar a.logout {
+  margin-top: auto;
+  color: #ff8a80;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 14px;
+  margin-top: 24px;
+}
+
+.sidebar a.logout:hover {
+  background: rgba(255, 138, 128, 0.12);
+  color: #ff8a80;
+}
+
+/* ---------------- Main content ---------------- */
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.header {
+  padding: 20px 32px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-head);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+#content-area {
+  flex: 1;
+  margin: 24px 32px;
+  padding: 28px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  color: var(--ink-soft);
+}
+
+#content-area p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* ---------------- Generic content-area helpers ----------------
+   These classes are unstyled by default in the fetched partials,
+   so they get baseline styling here for consistency. */
+
+#content-area table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+#content-area th {
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--border);
+}
+
+#content-area td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+}
+
+#content-area tr:hover td {
+  background: var(--paper);
+}
+
+#content-area input,
+#content-area select,
+#content-area textarea {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  width: 100%;
+  max-width: 360px;
+}
+
+#content-area input:focus,
+#content-area select:focus,
+#content-area textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+#content-area label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 14px 0 6px;
+  color: var(--ink);
+}
+
+#content-area button,
+#content-area .btn {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+#content-area button:hover,
+#content-area .btn:hover {
+  background: #2f56db;
+}
+
+#content-area button:active,
+#content-area .btn:active {
+  transform: translateY(1px);
+}
+
+#content-area .btn-danger {
+  background: var(--error);
+}
+
+#content-area .btn-danger:hover {
+  background: #a53324;
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 860px) {
+  .dashboard {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 14px 16px;
+    gap: 4px 10px;
+  }
+
+  .sidebar h2 {
+    width: 100%;
+    margin: 0 0 8px;
+  }
+
+  .sidebar h4 {
+    display: none;
+  }
+
+  .sidebar a.logout {
+    margin-left: auto;
+    margin-top: 0;
+    border-top: none;
+    padding-top: 9px;
+  }
+
+  #content-area {
+    margin: 16px;
+    padding: 18px;
+  }
+}

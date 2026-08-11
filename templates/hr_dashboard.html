@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HR Dashboard{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylehrdashboard.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="flash-container">
+        {% for category, message in messages %}
+        <div class="flash {{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <script>
+        setTimeout(function () {
+            const flashContainer = document.getElementById('flash-container');
+            if (flashContainer) {
+                flashContainer.style.transition = 'opacity 0.5s ease';
+                flashContainer.style.opacity = '0';
+                setTimeout(function () {
+                    flashContainer.remove();
+                }, 500);
+            }
+        }, 3000);
+    </script>
+
+    <div class="dashboard">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+             
+
+            <a href="{{ url_for('hr_dashboard') }}">Dashboard</a>
+             
+            <a href="{{ url_for('hr_leaves') }}">Leaves</a>
+             
+
+             
+             
+             
+            <a href="{{ url_for('leave_policy') }}"> Policy</a>
+
+            <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+
+             
+
+            <div id="content-area">
+                {% block content %}
+                <p>Select an option from the sidebar to get started.</p>
+                {% endblock %}
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

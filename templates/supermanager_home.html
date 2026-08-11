@@ -1,0 +1,40 @@
+{% extends "supermanager_dashboard.html" %}
+{% block title %}SuperManager Home{% endblock %}
+{% block content %}
+
+<style>
+    .details-container table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+    }
+
+    .details-container th,
+    .details-container td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .details-container th {
+        background: #f1f5f9;
+        width: 200px;
+    }
+
+    .details-container tr:hover td {
+        background: #f9fafb;
+    }
+</style>
+
+<div class="details-container">
+    <h2>Manager Details</h2>
+    <table>
+        <tr><th>Employee ID</th><td>{{ user.employeeid }}</td></tr>
+        <tr><th>Name</th><td>{{ user.name }}</td></tr>
+        <tr><th>Email</th><td>{{ user.emailid }}</td></tr>
+        <tr><th>Role</th><td>{{ user.position }}</td></tr>
+    </table>
+</div>
+
+{% endblock %}s

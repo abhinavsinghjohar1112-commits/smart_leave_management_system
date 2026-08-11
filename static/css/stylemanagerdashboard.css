@@ -1,0 +1,423 @@
+* {
+  box-sizing: border-box;
+  }
+
+:root {
+--primary: #0077b6;
+--primary-dark: #005f8f;
+--primary-light: #eaf7ff;
+--gold: #f2c94c;
+--dark: #172033;
+--sidebar: #1e293b;
+--sidebar-hover: #29384d;
+--background: #f4f8fb;
+--white: #ffffff;
+--text: #1e293b;
+--muted: #64748b;
+--border: #e2e8f0;
+--danger: #dc3545;
+--danger-dark: #bd2130;
+}
+
+body {
+margin: 0;
+font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+background: var(--background);
+color: var(--text);
+}
+
+.dashboard {
+display: flex;
+min-height: 100vh;
+width: 100%;
+}
+
+.sidebar {
+width: 255px;
+min-height: 100vh;
+background: linear-gradient(180deg, #172033 0%, #1e293b 100%);
+color: white;
+padding: 24px 18px;
+display: flex;
+flex-direction: column;
+flex-shrink: 0;
+box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+}
+
+.brand {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 4px 8px 24px;
+border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brand-icon {
+width: 42px;
+height: 42px;
+border-radius: 10px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: linear-gradient(135deg, var(--primary), #00a8e8);
+color: white;
+font-size: 15px;
+font-weight: 800;
+box-shadow: 0 5px 15px rgba(0, 119, 182, 0.3);
+}
+
+.brand-text h2 {
+margin: 0;
+font-size: 21px;
+letter-spacing: -0.5px;
+}
+
+.brand-text h2 span {
+color: var(--gold);
+}
+
+.brand-text p {
+margin: 3px 0 0;
+color: #94a3b8;
+font-size: 11px;
+}
+
+.manager-card {
+display: flex;
+align-items: center;
+gap: 11px;
+margin: 22px 4px;
+padding: 12px;
+background: rgba(255, 255, 255, 0.06);
+border: 1px solid rgba(255, 255, 255, 0.08);
+border-radius: 10px;
+}
+
+.manager-avatar {
+width: 38px;
+height: 38px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 50%;
+background: var(--gold);
+color: #172033;
+font-weight: 800;
+font-size: 15px;
+}
+
+.manager-card h4 {
+margin: 0;
+font-size: 13px;
+color: white;
+}
+
+.manager-card span {
+display: block;
+margin-top: 3px;
+color: #94a3b8;
+font-size: 11px;
+}
+
+.sidebar-nav {
+flex: 1;
+}
+
+.nav-title {
+margin: 8px 10px 10px;
+color: #64748b;
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 1px;
+}
+
+.nav-title-space {
+margin-top: 28px;
+}
+
+.nav-link {
+display: flex;
+align-items: center;
+gap: 12px;
+width: 100%;
+padding: 11px 12px;
+margin: 5px 0;
+border-radius: 8px;
+color: #cbd5e1;
+text-decoration: none;
+font-size: 13px;
+font-weight: 500;
+transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.nav-link:hover {
+background: rgba(255, 255, 255, 0.07);
+color: white;
+transform: translateX(2px);
+}
+
+.nav-link:first-of-type {
+background: linear-gradient(
+90deg,
+rgba(0, 119, 182, 0.25),
+rgba(0, 119, 182, 0.08)
+);
+color: white;
+border-left: 3px solid var(--gold);
+}
+
+.nav-icon {
+width: 22px;
+text-align: center;
+font-size: 17px;
+color: #94a3b8;
+}
+
+.nav-link:hover .nav-icon {
+color: var(--gold);
+}
+
+.nav-link.logout {
+margin-top: 8px;
+color: #fca5a5;
+}
+
+.nav-link.logout:hover {
+background: rgba(220, 53, 69, 0.15);
+color: #fecaca;
+}
+
+.sidebar-footer {
+border-top: 1px solid rgba(255, 255, 255, 0.08);
+padding: 18px 8px 0;
+}
+
+.sidebar-footer p {
+margin: 0;
+color: #94a3b8;
+font-size: 10px;
+}
+
+.sidebar-footer span {
+display: block;
+margin-top: 4px;
+color: #64748b;
+font-size: 10px;
+}
+
+.main-content {
+flex: 1;
+min-width: 0;
+background: var(--background);
+padding: 0 30px 40px;
+}
+
+.top-header {
+min-height: 92px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 20px;
+border-bottom: 1px solid var(--border);
+margin-bottom: 28px;
+}
+
+.welcome-small {
+margin: 0 0 5px;
+color: var(--primary);
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 1px;
+}
+
+.top-header h1 {
+margin: 0;
+font-size: 26px;
+color: var(--dark);
+font-weight: 700;
+}
+
+.header-user {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 7px 12px;
+background: white;
+border: 1px solid var(--border);
+border-radius: 10px;
+}
+
+.header-avatar {
+width: 34px;
+height: 34px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+background: var(--primary-light);
+color: var(--primary);
+font-weight: 700;
+font-size: 13px;
+}
+
+.header-user strong {
+display: block;
+font-size: 12px;
+color: var(--dark);
+}
+
+.header-user span {
+display: block;
+margin-top: 2px;
+font-size: 10px;
+color: var(--muted);
+}
+
+#content-area {
+width: 100%;
+}
+
+.welcome-card {
+background: white;
+border: 1px solid var(--border);
+border-radius: 12px;
+padding: 28px;
+box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+}
+
+.welcome-card h2 {
+margin: 0 0 8px;
+font-size: 20px;
+color: var(--dark);
+}
+
+.welcome-card p {
+margin: 0;
+color: var(--muted);
+font-size: 14px;
+line-height: 1.6;
+}
+
+#flash-container {
+position: fixed;
+top: 20px;
+left: 50%;
+transform: translateX(-50%);
+z-index: 1000;
+display: flex;
+flex-direction: column;
+gap: 10px;
+width: 90%;
+max-width: 420px;
+}
+
+.flash {
+padding: 12px 18px;
+border-radius: 8px;
+font-size: 13px;
+text-align: center;
+box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+}
+
+.flash.success {
+background: #dcfce7;
+color: #166534;
+border: 1px solid #bbf7d0;
+}
+
+.flash.error {
+background: #fee2e2;
+color: #991b1b;
+border: 1px solid #fecaca;
+}
+
+.flash.warning {
+background: #fef3c7;
+color: #92400e;
+border: 1px solid #fde68a;
+}
+
+.flash.info {
+background: #e0f2fe;
+color: #075985;
+border: 1px solid #bae6fd;
+}
+
+@media (max-width: 850px) {
+
+
+.sidebar {
+    width: 220px;
+}
+
+.main-content {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+
+}
+
+@media (max-width: 650px) {
+
+
+.dashboard {
+    flex-direction: column;
+}
+
+.sidebar {
+    width: 100%;
+    min-height: auto;
+    padding: 15px;
+}
+
+.brand {
+    padding-bottom: 15px;
+}
+
+.manager-card {
+    margin: 15px 0;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.nav-title {
+    width: 100%;
+}
+
+.nav-link {
+    width: auto;
+    flex: 1;
+    min-width: 120px;
+}
+
+.nav-title-space {
+    display: none;
+}
+
+.sidebar-footer {
+    display: none;
+}
+
+.main-content {
+    padding: 0 15px 30px;
+}
+
+.top-header {
+    min-height: 80px;
+}
+
+.header-user {
+    display: none;
+}
+
+.top-header h1 {
+    font-size: 22px;
+}
+
+
+}

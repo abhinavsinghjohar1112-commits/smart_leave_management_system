@@ -1,0 +1,61 @@
+{% if session['position'] == 'manager' %}
+    {% extends "manager_dashboard.html" %}
+{% elif session['position'] == 'hr' %}
+    {% extends "hr_dashboard.html" %}
+{% elif session['position'] == 'supermanager' %}
+    {% extends "supermanager_dashboard.html" %}
+{% else %}
+    {% extends "employee_dashboard.html" %}
+{% endif %}
+
+{% block title %}Monthly Leave Report{% endblock %}
+{% block content %}
+
+<style>
+    .report-container table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+    }
+
+    .report-container th,
+    .report-container td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .report-container th {
+        background: #f1f5f9;
+    }
+
+    .report-container tr:hover td {
+        background: #f9fafb;
+    }
+</style>
+
+<a href="{{ url_for('hr_leaves') }}" class="back-link">&larr; Back to Leave Dashboard</a>
+
+
+<div class="report-container">
+    <h3>Monthly Leave Report</h3>
+
+    <table>
+        <tr>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Total Days (This Month)</th>
+        </tr>
+
+        {% for row in data %}
+        <tr>
+            <td>{{ row.employeeid }}</td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.total_days }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

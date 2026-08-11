@@ -1,0 +1,13 @@
+# secrets
+.env
+
+# python
+__pycache__/
+*.pyc
+venv/
+env/
+tempCodeRunnerFile.py
+
+# OS/editor
+.vscode/
+.DS_Store

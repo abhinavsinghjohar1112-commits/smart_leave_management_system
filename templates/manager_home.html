@@ -1,0 +1,101 @@
+{% extends "manager_dashboard.html" %}
+{% block title %}My Team{% endblock %}
+
+{% block content %}
+
+<style>
+.container {
+    width: 90%;
+    margin: 30px auto;
+}
+
+/* Welcome text */
+.welcome {
+    font-size: 22px;
+    font-weight: bold;
+    color: #003366;
+    margin-bottom: 10px;
+}
+
+/* Subtitle */
+.subtitle {
+    color: gray;
+    margin-bottom: 20px;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+th {
+    background: linear-gradient(to right, #00bfff, #003366);
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+    background-color: #f5faff;
+}
+
+.empty {
+    text-align: center;
+    color: gray;
+    margin-top: 20px;
+}
+</style>
+
+<div class="container">
+
+<div class="welcome">
+    Welcome, {{ name }} 👋
+</div>
+
+<div class="subtitle">
+    Here are your team members
+</div>
+
+{% if user %}
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Department</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for emp in user %}
+        <tr>
+            <td>{{ emp.name }}</td>
+            <td>{{ emp.emailid }}</td>
+            <td>{{ emp.phone }}</td>
+            <td>{{ emp.department }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+
+<p class="empty">No employees assigned to you.</p>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

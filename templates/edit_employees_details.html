@@ -1,0 +1,63 @@
+{% extends "hr_dashboard.html" %}
+{% block title %}Edit Employee{% endblock %}
+
+{% block content %}
+
+<h2>Edit Employee</h2>
+
+<form method="POST" action="{{ url_for('update_employee_details') }}">
+
+    <!-- Employee ID -->
+    <input type="hidden" name="employee_id" value="{{ emp.employeeid }}">
+
+    <!-- Phone -->
+    <div>
+        <label>Phone</label><br>
+        <input type="text" name="phone" value="{{ emp.phone }}" required>
+    </div>
+
+    <br>
+
+    <!-- Email -->
+    <div>
+        <label>Email</label><br>
+        <input type="email" name="email" value="{{ emp.emailid }}" required>
+    </div>
+
+    <br>
+
+    <!-- Manager -->
+    <div>
+        <label>Manager</label><br>
+        <select name="manager_id" required>
+            <option value="">Select Manager</option>
+
+            {% for man in managers %}
+            <option value="{{ man.employeeid }}"
+                {% if emp.manager_id == man.employeeid %}selected{% endif %}>
+                {{ man.name }}
+            </option>
+            {% endfor %}
+
+        </select>
+    </div>
+
+    <br>
+
+    <!-- Status -->
+    <div>
+        <label>Status</label><br>
+        <select name="is_active">
+            <option value="1" {% if emp.is_active == 1 %}selected{% endif %}>Active</option>
+            <option value="0" {% if emp.is_active == 0 %}selected{% endif %}>Inactive</option>
+        </select>
+    </div>
+
+    <br>
+
+    <!-- Submit -->
+    <button type="submit">Update</button>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "hr_dashboard.html" %}
+{% block title %}HR Home{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('hr_dashboard') }}" class="back-link">&larr; Back to hr dashboard</a>
+ 
+
+<!-- 🔥 ADD EMPLOYEE BUTTON -->
+
+<a href="{{ url_for('add_employee') }}">
+    <button class="add-btn">+ Add Employee</button>
+</a>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Manager</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+
+    {% for emp in employees %}
+    <tr>
+
+        <td>{{ emp.name }}</td>
+
+        <!-- PHONE -->
+        <td>{{ emp.phone }}</td>
+
+        <!-- EMAIL -->
+        <td>{{ emp.emailid }}</td>
+
+        <!-- MANAGER -->
+        <td>{{ emp.manager_name }}</td>
+
+        <!-- STATUS -->
+        <td>
+            <span class="{{ 'status-active' if emp.is_active == 1 else 'status-inactive' }}">
+                {% if emp.is_active == 1 %}
+                Active
+                {% else %}
+                Inactive
+                {% endif %}
+            </span>
+        </td>
+
+        <!-- ACTION -->
+        <td>
+            <a href="{{ url_for('edit_employee_page', employeeid=emp.employeeid) }}">
+                <button>Edit</button>
+            </a>
+        </td>
+
+    </tr>
+    {% endfor %}
+
+
+</table>
+
+{% endblock %}

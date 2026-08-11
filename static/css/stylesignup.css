@@ -1,0 +1,175 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Body */
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #5f9cff, #6fd6ff);
+    padding: 20px;
+}
+
+/* Card */
+.card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 420px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Title */
+.card h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #222;
+}
+
+/* Form group */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+/* Labels */
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+/* Inputs & Select */
+.form-group input,
+.form-group select {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: #f8f9fa;
+    transition: all 0.25s ease;
+}
+
+/* Dropdown arrow fix */
+.form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%23666' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5 7l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+/* Focus */
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #5f9cff;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(95,156,255,0.2);
+    outline: none;
+}
+
+/* ===== RADIO BUTTONS (POSITION FIX) ===== */
+
+/* Container → single row */
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: nowrap;   /* force one row */
+}
+
+/* Each option */
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Radio input */
+.radio-option input[type="radio"] {
+    margin: 0;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+/* Prevent breaking (scroll instead) */
+.radio-group {
+    overflow-x: auto;
+}
+
+/* Error */
+.error {
+    font-size: 12px;
+    color: #e63946;
+    margin-top: 4px;
+}
+
+/* Flash message */
+p[style] {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* Button */
+.btn {
+    width: 100%;
+    height: 44px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #5f9cff, #4f8cff);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #4f8cff, #3f7cff);
+    transform: translateY(-1px);
+}
+
+/* Bottom link */
+.link {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 14px;
+}
+
+.link a {
+    color: #5f9cff;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.link a:hover {
+    text-decoration: underline;
+}
+
+/* Scrollbar */
+.card::-webkit-scrollbar {
+    width: 6px;
+}
+
+.card::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}

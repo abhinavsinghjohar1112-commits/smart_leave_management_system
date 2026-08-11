@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesignup.css') }}">
+
+
+
+ 
+</head>
+
+<body>
+
+<div class="card">
+
+    <h2>Signup</h2>
+     
+ {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <p style="color:red;">{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.position.label }}
+            <div class="radio-group">
+                {% for subfield in form.position %}
+                    <label class="radio-option">
+                        {{ subfield() }} {{ subfield.label.text }}
+                    </label>
+                {% endfor %}
+            </div>
+            {% for error in form.position.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.name.label }}
+            {{ form.name() }}
+            {% for error in form.name.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.employeeid.label }}
+            {{ form.employeeid() }}
+            {% for error in form.employeeid.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.emailid.label }}
+            {{ form.emailid() }}
+            {% for error in form.emailid.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.password.label }}
+            {{ form.password() }}
+            {% for error in form.password.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+          <div class="form-group">
+            {{ form.confirmpassword.label }}
+            {{ form.confirmpassword() }}
+            {% for error in form.confirmpassword.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.country_code.label }}
+            {{ form.country_code() }}
+            {% for error in form.country_code.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.phone.label }}
+            {{ form.phone() }}
+            {% for error in form.phone.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.department.label }}
+            {{ form.department() }}
+            {% for error in form.department.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        {{ form.submit(class="btn") }}
+
+    </form>
+
+    <div class="link">
+        <p>Already have an account?</p>
+        <a href="{{ url_for('login') }}">Login</a>
+    </div>
+
+</div>
+
+</body>
+</html>

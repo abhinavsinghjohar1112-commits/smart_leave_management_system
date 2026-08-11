@@ -1,0 +1,57 @@
+{% if session['position'] == 'manager' %}
+    {% extends "manager_dashboard.html" %}
+{% elif session['position'] == 'supermanager' %}
+    {% extends "supermanager_dashboard.html" %}
+{% else %}
+    {% extends "employee_dashboard.html" %}
+{% endif %}
+
+{% block title %}Update Leave Request{% endblock %}
+{% block content %}
+
+<style>
+    .req-container table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    .req-container th { background-color: #FFD700; color: black; padding: 10px; text-align: left; }
+    .req-container td { padding: 10px; border-bottom: 1px solid #ddd; vertical-align: top; }
+    .req-container input[type="text"] { width: 90%; padding: 6px; }
+    .req-container button { padding: 6px 12px; margin-right: 6px; cursor: pointer; }
+</style>
+<a href="{{ url_for('manager_dashboard') }}" class="back-link">&larr; Back to manager dashboard</a>
+
+
+<div class="req-container">
+    <h3>Pending Leave Requests</h3>
+
+    <table>
+        <tr>
+            <th>Employee</th>
+            <th>Type</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Days</th>
+            <th>Comment</th>
+            <th>Action</th>
+        </tr>
+
+        {% for row in data %}
+        <tr>
+            <td>{{ row.employeeid }}</td>
+            <td>{{ row.leave_type }}</td>
+            <td>{{ row.start_date }}</td>
+            <td>{{ row.end_date }}</td>
+            <td>{{ row.totaldays }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('update_leave_request') }}" style="display:inline;">
+                    <input type="hidden" name="leave_id" value="{{ row.leave_id }}">
+                    <input type="text" name="comment" placeholder="optional comment">
+                    <br><br>
+                    <button type="submit" name="decision" value="approved">Approve</button>
+                    <button type="submit" name="decision" value="rejected">Reject</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

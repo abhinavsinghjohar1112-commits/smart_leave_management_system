@@ -1,0 +1,129 @@
+{% extends "employee_dashboard.html" %}
+
+{% block title %}Leave Dashboard{% endblock %}
+
+{% block extra_head %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/styleemployeeleaves.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="leave-page">
+
+
+<div class="leave-container">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div>
+            <h2>Leave Requests</h2>
+            <p>View and manage your leave applications</p>
+        </div>
+
+        <a href="{{ url_for('applyleave') }}" class="apply-btn">
+            + Apply Leave
+        </a>
+    </div>
+
+    <!-- Leave Table -->
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Leave Type</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Days</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% if data %}
+
+                {% for row in data %}
+
+                <tr>
+
+                    <td>{{ row.id }}</td>
+
+                    <td>{{ row.leave_type }}</td>
+
+                    <td>{{ row.start_date }}</td>
+
+                    <td>{{ row.end_date }}</td>
+
+                    <td>{{ row.totaldays }}</td>
+
+                    <td>
+                        <span class="status status-{{ row.status }}">
+                            {{ row.status | capitalize }}
+                        </span>
+                    </td>
+
+                    <td>
+
+                        {% if row.status == 'pending' %}
+
+                        <a href="{{ url_for('cancel_leave', leave_id=row.id) }}"
+                           class="cancel-btn">
+                            Cancel
+                        </a>
+
+                        {% else %}
+
+                        <span class="no-action">—</span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            {% else %}
+
+                <tr>
+                    <td colspan="7" class="empty-state">
+                        No leave records found.
+                    </td>
+                </tr>
+
+            {% endif %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="bottom-actions">
+
+        <a href="{{ url_for('remaining_employee_leaves') }}"
+           class="balance-btn">
+            View Remaining Leave Balance
+        </a>
+
+    </div>
+
+    <!-- Back -->
+    <a href="{{ url_for('employee_dashboard') }}"
+       class="back-link">
+        ← Back to Employee Dashboard
+    </a>
+
+</div>
+
+
+</div>
+
+{% endblock %}

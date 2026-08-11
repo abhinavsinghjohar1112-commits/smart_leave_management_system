@@ -1,0 +1,209 @@
+{% if session['position'] == 'manager' %}
+{% extends "manager_dashboard.html" %}
+{% elif session['position'] == 'hr' %}
+{% extends "hr_dashboard.html" %}
+{% elif session['position'] == 'supermanager' %}
+{% extends "supermanager_dashboard.html" %}
+{% else %}
+{% extends "employee_dashboard.html" %}
+{% endif %}
+
+
+
+ 
+    
+    
+ 
+
+
+
+{% block title %}Apply Leave{% endblock %}
+{% block content %}
+{% if session.get('position') == 'manager' %} <a href="{{ url_for('manager_leaves') }}" class="back-dashboard">
+    ← Back to Manager Dashboard </a>
+
+{% elif session.get('position') == 'hr' %} <a href="{{ url_for('hr_leaves') }}" class="back-dashboard">
+    ← Back to HR Dashboard </a>
+
+{% elif session.get('position') == 'supermanager' %} <a href="{{ url_for('supermanager_dashboard') }}"
+    class="back-dashboard">
+    ← Back to Supermanager Dashboard </a>
+
+{% else %} <a href="{{ url_for('employee_leaves') }}" class="back-dashboard">
+    ← Back to Employee Dashboard </a>
+{% endif %}
+
+<style>
+    .back-dashboard {
+        display: block;
+        width: 500px;
+        margin: 30px auto 0;
+        color: #0077b6;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+    .back-dashboard:hover {
+        color: #005f8f;
+        text-decoration: underline;
+    }
+
+
+    .apply-container {
+        width: 500px;
+        margin: 40px auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .apply-container h2 {
+        text-align: center;
+        color: #0077b6;
+        margin-bottom: 25px;
+    }
+
+    .apply-container label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .apply-container .field {
+        margin-bottom: 20px;
+    }
+
+    .apply-container input,
+    .apply-container select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+        font-size: 14px;
+        background-color: #f9f9f9;
+    }
+
+    .apply-container .row {
+        display: flex;
+        gap: 12px;
+    }
+
+    .apply-container .col {
+        flex: 1;
+    }
+
+    .apply-container .sub-label {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .apply-container .radio-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 8px;
+    }
+
+    .apply-container .radio-group label {
+        font-weight: normal;
+        font-size: 14px;
+    }
+
+    .apply-container .btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #0077b6, #ffd700);
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .apply-container .btn:hover {
+        opacity: 0.9;
+    }
+
+    .apply-container .flash {
+        padding: 10px;
+        background-color: #fff3cd;
+        color: #856404;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .apply-container .error {
+        color: red;
+        font-size: 13px;
+        margin-top: 4px;
+    }
+</style>
+
+<div class="apply-container">
+    <h2>Apply for Leave</h2>
+
+    {% with messages = get_flashed_messages() %}
+    {% for msg in messages %}
+    <div class="flash">{{ msg }}</div>
+    {% endfor %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('applyleave') }}">
+        {{ form.hidden_tag() }}
+
+        <div class="field">
+            <label>Leave Type</label>
+            <div class="radio-group">
+                {% for subfield in form.leave_type %}
+                <label>{{ subfield() }} {{ subfield.label.text }}</label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Start</label>
+            <div class="row">
+                <div class="col">
+                    <span class="sub-label">Date</span>
+                    {{ form.start_date() }}
+                </div>
+                <div class="col">
+                    <span class="sub-label">Session</span>
+                    {{ form.halfofstart() }}
+                </div>
+            </div>
+            {% for err in form.start_date.errors %}
+            <div class="error">{{ err }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="field">
+            <label>End</label>
+            <div class="row">
+                <div class="col">
+                    <span class="sub-label">Date</span>
+                    {{ form.end_date() }}
+                </div>
+                <div class="col">
+                    <span class="sub-label">Session</span>
+                    {{ form.halfofend() }}
+                </div>
+            </div>
+            {% for err in form.end_date.errors %}
+            <div class="error">{{ err }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="field">
+            {{ form.submit(class="btn") }}
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "employee_dashboard.html" %}
+{% block title %}Employee Dashboard{% endblock %}
+{% block content %}
+<h2>hey {{user.name}} how are u doing ...</h2>
+<table>
+    <tr><th>Field</th><th>Information</th></tr>
+    <tr><td><b>name</b></td><td>{{ user.name }}</td></tr>
+
+    <tr><td><b>Employee ID</b></td><td>{{ user.employeeid }}</td></tr>
+    <tr><td><b>Email</b></td><td>{{ user.emailid }}</td></tr>
+    <tr><td><b>Role</b></td><td>{{ user.position }}</td></tr>
+</table>
+{% endblock %}

@@ -1,0 +1,193 @@
+{% extends "hr_dashboard.html" %}
+{% block title %}Leave Policy{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* Section Styling */
+.section {
+    background: white;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+}
+
+/* Headings */
+h2 {
+    margin-bottom: 20px;
+}
+
+h3 {
+    margin-bottom: 15px;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #343a40;
+    color: white;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Form Grid */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* Inputs */
+input, select {
+    width: 100%;
+    padding: 6px;
+}
+
+/* Checkbox group */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Button */
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+</style>
+
+<h2>Leave Policy Management</h2>
+
+<a href="{{ url_for('hr_dashboard') }}" class="back-link">&larr; Back to hr dashboard</a>
+
+
+<!-- 🔝 EXISTING POLICIES -->
+<div class="section">
+
+    <h3>Existing Policies</h3>
+
+    <table>
+        <tr>
+            <th>Leave Type</th>
+            <th>Total Leaves</th>
+            <th>Max / Month</th>
+            <th>Min Notice</th>
+            <th>Half Day</th>
+        </tr>
+
+        {% for p in policies %}
+        <tr>
+            <td>{{ p.leave_type }}</td>
+            <td>{{ p.total_leaves }}</td>
+            <td>{{ p.max_per_month }}</td>
+            <td>{{ p.min_notice_days }}</td>
+            <td>
+                {% if p.allow_half_day %}
+                    ✔
+                {% else %}
+                    ✖
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+<!-- 🔽 ADD / UPDATE POLICY FORM -->
+<div class="section">
+
+    <h3>Add / Update Leave Policy</h3>
+
+    <form method="POST">
+
+        <div class="form-grid">
+
+            <div>
+                <label>Leave Type:</label>
+                <select name="leave_type" required>
+                    <option value="casual leave">Casual Leave</option>
+                    <option value="sick leave">Sick Leave</option>
+                    <option value="earned leave">Earned Leave</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Total Leaves (Yearly):</label>
+                <input type="number" name="total_leaves" required>
+            </div>
+
+            <div>
+                <label>Max Leaves Per Month:</label>
+                <input type="number" name="max_per_month">
+            </div>
+
+            <div>
+                <label>Minimum Notice Days:</label>
+                <input type="number" name="min_notice_days">
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" name="allow_half_day" value="1">
+                <label>Allow Half Day</label>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <h3>System Rules</h3>
+
+        <div class="form-grid">
+
+            <div>
+                <label>Max Department Leave %:</label>
+                <input type="number" name="max_department_leave_percent"
+                       value="{{ system_rules.max_department_leave_percent }}">
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" name="exclude_weekends" value="1"
+                    {% if system_rules.exclude_weekends %}checked{% endif %}>
+                <label>Exclude Weekends</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" name="exclude_holidays" value="1"
+                    {% if system_rules.exclude_holidays %}checked{% endif %}>
+                <label>Exclude Holidays</label>
+            </div>
+
+        </div>
+
+        <button type="submit">Save Policy</button>
+
+    </form>
+
+</div>
+
+{% endblock %}

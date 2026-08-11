@@ -1,0 +1,133 @@
+{% if session['position'] == 'hr' %}
+{% extends "hr_dashboard.html" %}
+{% elif session['position'] == 'supermanager' %}
+{% extends "supermanager_dashboard.html" %}
+{% else %}
+{% extends "employee_dashboard.html" %}
+{% endif %}
+
+{% block title %}Add Employee{% endblock %}
+
+{% block content %}
+
+<style>
+/* Center form */
+.form-container {
+    width: 420px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(135, 206, 235, 0.15);
+    backdrop-filter: blur(10px);
+}
+
+/* Form layout */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Labels */
+label {
+    font-weight: 600;
+}
+
+/* Inputs */
+input, select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* Phone row */
+.phone-row {
+    display: flex;
+    gap: 10px;
+}
+
+/* 🔥 Radio group horizontal */
+.radio-group {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+/* Each radio + label */
+.radio-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Submit button */
+button, input[type="submit"] {
+    background: linear-gradient(to right, #00bfff, gold);
+    border: none;
+    padding: 10px;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Flash messages */
+.flash {
+    color: green;
+    text-align: center;
+}
+</style>
+<a href="{{ url_for('manage_employees') }}" class="back-link">&larr; Back to manage employee</a>
+
+
+<div class="form-container">
+
+ 
+{% with messages = get_flashed_messages() %}
+    {% for msg in messages %}
+        <p class="flash">{{ msg }}</p>
+    {% endfor %}
+{% endwith %}
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+
+    <label>Name:</label>
+    {{ form.name() }}
+
+    <label>Employee ID:</label>
+    {{ form.employeeid() }}
+
+    <label>Email:</label>
+    {{ form.emailid() }}
+
+    <label>Phone:</label>
+    <div class="phone-row">
+        {{ form.country_code() }}
+        {{ form.phone() }}
+    </div>
+
+    <label>Password:</label>
+    {{ form.password() }}
+
+    <label>Position:</label>
+    <div class="radio-group">
+        {% for subfield in form.position %}
+            <label class="radio-item">
+                {{ subfield() }}
+                {{ subfield.label.text }}
+            </label>
+        {% endfor %}
+    </div>
+
+    <label>Department:</label>
+    {{ form.department() }}
+
+    {{ form.submit() }}
+
+</form>
+ 
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends parent_template %}
+
+{% block title %}Department Report{% endblock %}
+
+ 
+
+{% block extra_head %}
+<style>
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background: #f2f2f2;
+}
+
+.dept-row {
+    cursor: pointer;
+    background: #fafafa;
+}
+
+.dept-row:hover {
+    background: #eef7fb;
+}
+
+.details-row td {
+    background: #f9fbfc;
+    padding: 0 10px 10px 10px;
+}
+
+.sub-table {
+    margin-top: 5px;
+}
+
+.sub-table th {
+    background: #e6f4fb;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #003366;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<a href="{{ url_for('hr_leaves') }}" class="back-link">&larr; Back to Leave Dashboard</a>
+
+<h2>Department Report (This Month)</h2>
+
+<table>
+    <tr>
+        <th>Department</th>
+        <th>Total Approved Leaves</th>
+    </tr>
+
+    {% if data %}
+    {% for row in data %}
+    <tr class="dept-row" onclick="toggleDetails('{{ row.department }}')">
+        <td>{{ row.department }} ▾</td>
+        <td>{{ row.total_leaves }}</td>
+    </tr>
+    <tr id="details-{{ row.department }}" class="details-row" style="display:none;">
+        <td colspan="2">
+            <table class="sub-table" id="table-{{ row.department }}">
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Name</th>
+                    <th>Approved Leaves</th>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+        <td colspan="2">No approved leaves this month</td>
+    </tr>
+    {% endif %}
+</table>
+
+<script>
+function toggleDetails(department) {
+    const row = document.getElementById('details-' + department);
+    const isHidden = row.style.display === 'none';
+
+    if (isHidden) {
+        fetch(`/department_details/${encodeURIComponent(department)}`)
+            .then(res => {
+                if (!res.ok) throw new Error('Access denied or request failed');
+                return res.json();
+            })
+            .then(data => {
+                const table = document.getElementById('table-' + department);
+                table.innerHTML = `
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Approved Leaves</th>
+                    </tr>
+                `;
+                if (data.length === 0) {
+                    table.innerHTML += `<tr><td colspan="3">No records found</td></tr>`;
+                } else {
+                    data.forEach(emp => {
+                        const tr = document.createElement('tr');
+
+                        const tdId = document.createElement('td');
+                        tdId.textContent = emp.employeeid;
+
+                        const tdName = document.createElement('td');
+                        tdName.textContent = emp.name;
+
+                        const tdLeaves = document.createElement('td');
+                        tdLeaves.textContent = emp.total_leaves;
+
+                        tr.appendChild(tdId);
+                        tr.appendChild(tdName);
+                        tr.appendChild(tdLeaves);
+                        table.appendChild(tr);
+                    });
+                }
+                row.style.display = 'table-row';
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Could not load department details.');
+            });
+    } else {
+        row.style.display = 'none';
+    }
+}
+</script>
+
+{% endblock %}

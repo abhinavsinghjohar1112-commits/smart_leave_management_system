@@ -1,0 +1,105 @@
+{% extends "hr_dashboard.html" %}
+{% block title %}HRs Home{% endblock %}
+
+{% block content %}
+
+<style>
+/* 🌈 Page Wrapper */
+.page-container {
+    padding: 20px;
+}
+
+/* 👋 Welcome Text */
+.welcome-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #003366;
+    margin-bottom: 20px;
+}
+
+/* 📦 Dashboard Layout */
+.dashboard-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* 🧊 Cards */
+.card {
+    flex: 1;
+    min-width: 280px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 14px;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* 📝 Titles */
+.card h3 {
+    margin-bottom: 10px;
+    color: #003366;
+    font-size: 18px;
+}
+
+/* 🔢 Values */
+.card .value {
+    font-size: 34px;
+    font-weight: bold;
+    color: #1e293b;
+}
+
+/* 📄 Text */
+.card p {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* 🎨 Accent Colors */
+.employees {
+    border-left: 6px solid #87ceeb;
+}
+
+.messages {
+    border-left: 6px solid #d4af37;
+}
+</style>
+
+<div class="page-container">
+
+ 
+<!-- 👋 Welcome -->
+<div class="welcome-text">
+    Welcome  {{name}}👋 below are all the employees in your company
+</div>
+
+<!-- 📊 Cards -->
+<div class="dashboard-container">
+
+    <!-- Employees Card -->
+     <button><a href ="{{url_for('manage_employees')}}"><div class="card employees">
+        <h3>Total Employees</h3>
+        <div class="value">{{ number }}</div>
+        <p>Manage employees here .......</p>
+    </div></a></button>
+
+    <!-- Messages Card -->
+    <button><a href = #></a><div class="card messages">
+        <h3>Messages</h3>
+        <div class="value">...</div>
+        <p>Pending notifications</p>
+    </div></button>
+
+</div>
+ 
+
+</div>
+
+{% endblock %}

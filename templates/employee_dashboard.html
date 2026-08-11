@@ -1,0 +1,288 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Employee Dashboard{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/styleemployeedashboard.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    {% block extra_head %}{% endblock %}
+
+</head>
+
+
+<body>
+
+    <!-- Background -->
+
+    <div class="background"></div>
+
+    <div class="background-glow"></div>
+
+
+    <!-- Flash Messages -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            <div id="flash-container">
+
+                {% for category, message in messages %}
+
+                    <div class="flash {{ category }}">
+
+                        <i class="
+                            {% if category == 'success' %}
+                                fa-solid fa-circle-check
+                            {% elif category == 'error' %}
+                                fa-solid fa-circle-xmark
+                            {% elif category == 'warning' %}
+                                fa-solid fa-triangle-exclamation
+                            {% else %}
+                                fa-solid fa-circle-info
+                            {% endif %}
+                        "></i>
+
+                        <span>{{ message }}</span>
+
+                        <button onclick="closeFlash(this)">
+                            ×
+                        </button>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+
+    <!-- Main Layout -->
+
+    <div class="dashboard">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+
+            <!-- Logo -->
+
+            <div class="logo">
+
+                <div class="logo-icon">
+
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>Leave<span>Flow</span></h2>
+
+                    <p>EMPLOYEE PORTAL</p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Navigation -->
+
+            <nav>
+
+                <a href="{{ url_for('employee_dashboard') }}"
+                   class="nav-link active">
+
+                    <i class="fa-solid fa-house"></i>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+
+                <a href="{{ url_for('employee_leaves') }}"
+                   class="nav-link">
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                    <span>My Leaves</span>
+
+                </a>
+
+            </nav>
+
+
+
+            <!-- Logout -->
+
+            <div class="sidebar-bottom">
+
+                <a href="{{ url_for('logout') }}"
+                   class="logout">
+
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                    <span>Logout</span>
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- CONTENT -->
+
+        <main class="main-content">
+
+
+            <!-- Small top heading -->
+
+            <div class="top-heading">
+
+                <div>
+
+                    <span>EMPLOYEE DASHBOARD</span>
+
+                    <h1>
+                        {% block page_heading %}
+                        Welcome Back 👋
+                        {% endblock %}
+                    </h1>
+
+                </div>
+
+                <div class="today">
+
+                    <i class="fa-regular fa-calendar"></i>
+
+                    <span id="current-date"></span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Main Content Card -->
+
+            <div id="content-area">
+
+                {% block content %}
+
+                {% endblock %}
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+
+
+    <script>
+
+        /* Current date */
+
+        const dateElement =
+            document.getElementById("current-date");
+
+        if (dateElement) {
+
+            const today = new Date();
+
+            dateElement.textContent =
+                today.toLocaleDateString(
+                    "en-IN",
+                    {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric"
+                    }
+                );
+
+        }
+
+
+
+        /* Close flash */
+
+        function closeFlash(button) {
+
+            const flash =
+                button.closest(".flash");
+
+            flash.style.opacity = "0";
+
+            flash.style.transform =
+                "translateY(-15px)";
+
+            setTimeout(() => {
+
+                flash.remove();
+
+            }, 300);
+
+        }
+
+
+
+        /* Auto hide flash */
+
+        setTimeout(() => {
+
+            const container =
+                document.getElementById("flash-container");
+
+            if (container) {
+
+                container.style.opacity = "0";
+
+                container.style.transform =
+                    "translate(-50%, -15px)";
+
+                setTimeout(() => {
+
+                    container.remove();
+
+                }, 400);
+
+            }
+
+        }, 4000);
+
+    </script>
+
+</body>
+
+</html>
+

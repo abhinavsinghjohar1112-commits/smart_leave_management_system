@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+    {% block title %}Manager Dashboard{% endblock %}
+</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/stylemanagerdashboard.css') }}">
+
+{% block extra_head %}{% endblock %}
+
+
+</head>
+
+<body>
+
+
+<!-- ================= FLASH MESSAGES ================= -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        <div id="flash-container">
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+{% endwith %}
+
+
+<script>
+
+    setTimeout(function () {
+
+        const flashContainer =
+            document.getElementById('flash-container');
+
+        if (flashContainer) {
+
+            flashContainer.style.transition =
+                'opacity 0.5s ease';
+
+            flashContainer.style.opacity = '0';
+
+            setTimeout(function () {
+                flashContainer.remove();
+            }, 500);
+
+        }
+
+    }, 3000);
+
+</script>
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<div class="dashboard">
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+
+        <!-- Logo / Brand -->
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                LM
+            </div>
+
+            <div class="brand-text">
+
+                <h2>Leave<span>MS</span></h2>
+
+                <p>Manager Portal</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Manager Information -->
+
+        <div class="manager-card">
+
+            <div class="manager-avatar">
+                {{ session.get('name', 'M')[0] | upper }}
+            </div>
+
+            <div>
+
+                <h4>
+                    {{ session.get('name', 'Manager') }}
+                </h4>
+
+                <span>Manager</span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Navigation -->
+
+        <nav class="sidebar-nav">
+
+
+            <p class="nav-title">
+                MAIN MENU
+            </p>
+
+
+            <a href="{{ url_for('manager_dashboard') }}"
+               class="nav-link">
+
+                <span class="nav-icon">⌂</span>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <a href="{{ url_for('manager_leaves') }}"
+               class="nav-link">
+
+                <span class="nav-icon">▣</span>
+
+                <span>Leaves</span>
+
+            </a>
+
+
+            <a href="{{ url_for('update_leave_request') }}"
+               class="nav-link">
+
+                <span class="nav-icon">✓</span>
+
+                <span>Update Leave Requests</span>
+
+            </a>
+
+
+            <p class="nav-title nav-title-space">
+                ACCOUNT
+            </p>
+
+
+            <a href="{{ url_for('logout') }}"
+               class="nav-link logout">
+
+                <span class="nav-icon">↪</span>
+
+                <span>Logout</span>
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- Sidebar Footer -->
+
+        <div class="sidebar-footer">
+
+            <p>Leave Management System</p>
+            <span>Manager Panel</span>
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="main-content">
+
+
+        <!-- Top Header -->
+
+        <header class="top-header">
+
+            <div>
+
+                <p class="welcome-small">
+                    MANAGER PORTAL
+                </p>
+
+                <h1>
+                    {% block page_heading %}
+                    Manager Dashboard
+                    {% endblock %}
+                </h1>
+
+            </div>
+
+
+            <div class="header-user">
+
+                <div class="header-avatar">
+                    {{ session.get('name', 'M')[0] | upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ session.get('name', 'Manager') }}
+                    </strong>
+
+                    <span>
+                        Manager
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Page Content -->
+
+        <section id="content-area">
+
+            {% block content %}
+
+                <div class="welcome-card">
+
+                    <div>
+
+                        <h2>
+                            Welcome to your dashboard
+                        </h2>
+
+                        <p>
+                            Manage employee leave requests,
+                            review applications and keep track
+                            of your team's leave activity.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            {% endblock %}
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>

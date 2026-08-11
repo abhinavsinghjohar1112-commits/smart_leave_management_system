@@ -1,0 +1,229 @@
+{% if role == 'manager' %}
+{% extends "manager_dashboard.html" %}
+{% elif role == 'hr' %}
+{% extends "hr_dashboard.html" %}
+{% else %}
+{% extends "employee_dashboard.html" %}
+{% endif %}
+
+{% block title %}Leave Dashboard{% endblock %}
+
+{% block extra_head %}
+
+<style>
+/* Top bar */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.apply-btn {
+    background: #87ceeb;
+    color: #003366;
+    padding: 10px 16px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.apply-btn:hover {
+    background: #5bb6e6;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background: #f2f2f2;
+}
+
+/* Status colors */
+.status-pending {
+    color: orange;
+    font-weight: bold;
+}
+
+.status-approved {
+    color: green;
+    font-weight: bold;
+}
+
+.status-rejected {
+    color: red;
+    font-weight: bold;
+}
+
+.status-cancelled {
+    color: gray;
+    font-weight: bold;
+}
+
+/* Cancel button */
+.btn-cancel {
+    background: #ff4d4d;
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn-cancel:hover {
+    background: #cc0000;
+}
+
+/* Reports section */
+.report-section {
+    margin-top: 30px;
+}
+
+.report-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.report-btn {
+    background: #87ceeb;
+    color: #003366;
+    padding: 10px 18px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.report-btn:hover {
+    background: #5bb6e6;
+}
+
+
+
+.report-btn {
+    display: inline-block;
+    padding: 10px 18px;
+    margin-bottom: 15px;
+    text-decoration: none;
+    border-radius: 8px;
+    background: #0ea5e9; /* sky blue */
+    color: white;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.report-btn:hover {
+    background: #0284c7;
+    transform: translateX(1px); /* slight move on hover */
+}
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="top-bar">
+    <h2>Leave Requests</h2>
+
+
+<a href="{{ url_for('applyleave') }}" class="apply-btn">
+    + Apply Leave
+</a>
+
+
+</div>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Leave Type</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Days</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+
+{% if data %}
+{% for row in data %}
+<tr>
+    <td>{{ row.id }}</td>
+    <td>{{ row.leave_type }}</td>
+    <td>{{ row.start_date }}</td>
+    <td>{{ row.end_date }}</td>
+    <td>{{ row.totaldays }}</td>
+
+    <td>
+        <span class="status-{{ row.status }}">
+            {{ row.status | capitalize }}
+        </span>
+    </td>
+
+    <td>
+        {% if row.status == 'pending' %}
+        <a href="{{ url_for('cancel_leave', leave_id=row.id) }}" class="btn-cancel">
+            Cancel
+        </a>
+        {% else %}
+        -
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+{% else %}
+<tr>
+    <td colspan="7">No leave records found</td>
+</tr>
+{% endif %}
+
+
+</table>
+
+<!-- ✅ Reports Section (Hidden for Employees) -->
+
+{% if role != 'employee' %}
+
+<div class="report-section">
+    <h3>Reports</h3>
+
+
+<div class="report-buttons">
+    <a href="{{ url_for('monthly_report') }}" class="report-btn">
+        Monthly Report
+    </a>
+
+    <a href="{{ url_for('department_report') }}" class="report-btn">
+        Department Report (this month )
+    </a>
+
+    <a href="{{ url_for('most_absent') }}" class="report-btn">
+        Most Absent (this month )
+    </a>
+    <a href="{{ url_for('remaining_leaves') }}" class="report-btn">
+        Remaining Leave Balance
+    </a>
+</div>
+
+
+</div>
+
+{% endif %}
+
+{% if role =='employee' %}
+<a href="{{ url_for('remaining_leaves') }}">Leave Balance</a>
+{% endif %}
+
+<a href="{{ url_for('hr_dashboard') }}" class="back-link">&larr; Back to hr dashboard</a>
+{% endblock %}
+
+
+

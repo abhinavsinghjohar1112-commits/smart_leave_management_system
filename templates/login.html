@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Login</title>
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylelogin.css') }}">
+
+
+</head>
+
+<body>
+
+
+    <div class="card">
+
+        <h2>Login</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div id="flash-container">
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+
+
+            <!-- LOGIN FIELD -->
+            <div class="form-group">
+                {{ form.login.label }}
+                {{ form.login(class="form-control " + ("input-error" if form.login.errors else "")) }}
+
+                {% for error in form.login.errors %}
+                <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- ROLE FIELD -->
+            <div class="form-group">
+                {{ form.position.label }}
+                <div class="radio-group">
+                    {% for subfield in form.position %}
+                    <label class="radio-option">
+                        {{ subfield() }} {{ subfield.label.text }}
+                    </label>
+                    {% endfor %}
+                </div>
+
+                {% for error in form.position.errors %}
+                <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- PASSWORD FIELD -->
+            <div class="form-group">
+                {{ form.password.label }}
+                {{ form.password(class=("input-error" if form.password.errors else "")) }}
+
+                {% for error in form.password.errors %}
+                <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            {{ form.submit(class="btn") }}
+        </form>
+
+        <div class="link">
+            <p>Don't have an account?</p>
+            <a href="{{ url_for('signup') }}">Create Account</a>
+        </div>
+
+    </div>
+
+
+
+    <script>
+        // Auto-hide after 3 seconds
+        setTimeout(function () {
+            let flashes = document.querySelectorAll('.flash');
+            flashes.forEach(function (flash) {
+                flash.style.opacity = '0';
+                setTimeout(() => flash.remove(), 500); // remove after fade
+            });
+        }, 5000);
+    </script>
+    <script>
+        window.addEventListener("pageshow", function (event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>
