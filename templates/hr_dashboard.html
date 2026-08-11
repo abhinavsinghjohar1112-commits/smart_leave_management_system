@@ -1,74 +1,322 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}HR Dashboard{% endblock %}</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylehrdashboard.css') }}">
-    {% block extra_head %}{% endblock %}
+<html lang="en">
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{% block title %}HR Dashboard{% endblock %}</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/stylehrdashboard.css') }}">
+
+{% block extra_head %}{% endblock %}
+
+
 </head>
 
 <body>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
+ 
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
     {% if messages %}
-    <div id="flash-container">
-        {% for category, message in messages %}
-        <div class="flash {{ category }}">
-            {{ message }}
+
+        <div id="flash-container">
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+
+                    <span class="flash-icon">
+
+                        {% if category == 'success' %}
+                            ✓
+                        {% elif category in ['error', 'danger'] %}
+                            !
+                        {% else %}
+                            i
+                        {% endif %}
+
+                    </span>
+
+                    <span>{{ message }}</span>
+
+                </div>
+
+            {% endfor %}
+
         </div>
-        {% endfor %}
-    </div>
+
     {% endif %}
-    {% endwith %}
 
-    <script>
-        setTimeout(function () {
-            const flashContainer = document.getElementById('flash-container');
-            if (flashContainer) {
-                flashContainer.style.transition = 'opacity 0.5s ease';
-                flashContainer.style.opacity = '0';
-                setTimeout(function () {
-                    flashContainer.remove();
-                }, 500);
-            }
-        }, 3000);
-    </script>
+{% endwith %}
 
-    <div class="dashboard">
 
-        <!-- SIDEBAR -->
-        <div class="sidebar">
-             
+<!-- =========================
+     DASHBOARD
+========================== -->
 
-            <a href="{{ url_for('hr_dashboard') }}">Dashboard</a>
-             
-            <a href="{{ url_for('hr_leaves') }}">Leaves</a>
-             
+<div class="dashboard">
 
-             
-             
-             
-            <a href="{{ url_for('leave_policy') }}"> Policy</a>
 
-            <a href="{{ url_for('logout') }}" class="logout">Logout</a>
-        </div>
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
 
-        <!-- MAIN CONTENT -->
-        <div class="main-content">
+    <aside class="sidebar">
 
-             
 
-            <div id="content-area">
-                {% block content %}
-                <p>Select an option from the sidebar to get started.</p>
-                {% endblock %}
+        <!-- Brand -->
+
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">
+                HR
+            </div>
+
+            <div class="brand-text">
+
+                <strong>SmartLeave</strong>
+
+                <span>HR Management</span>
+
             </div>
 
         </div>
 
-    </div>
+
+        <!-- Navigation -->
+
+        <div class="nav-section">
+
+            <span class="nav-title">
+                MANAGEMENT
+            </span>
+
+
+            <a href="{{ url_for('hr_dashboard') }}"
+               class="nav-link {% if request.endpoint == 'hr_dashboard' %}active{% endif %}">
+
+                <span class="nav-icon">⌂</span>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <a href="{{ url_for('hr_leaves') }}"
+               class="nav-link {% if request.endpoint == 'hr_leaves' %}active{% endif %}">
+
+                <span class="nav-icon">▣</span>
+
+                <span>Leave Requests</span>
+
+            </a>
+
+
+            <a href="{{ url_for('leave_policy') }}"
+               class="nav-link {% if request.endpoint == 'leave_policy' %}active{% endif %}">
+
+                <span class="nav-icon">⚙</span>
+
+                <span>Leave Policy</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- Bottom -->
+
+        <div class="sidebar-bottom">
+
+            <div class="sidebar-divider"></div>
+
+
+            <a href="{{ url_for('logout') }}"
+               class="nav-link logout">
+
+                <span class="nav-icon">↪</span>
+
+                <span>Logout</span>
+
+            </a>
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN AREA
+    ========================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOP HEADER -->
+
+        <header class="top-header">
+
+
+            <div class="page-heading">
+
+                <span class="page-label">
+                    HR PORTAL
+                </span>
+
+                <h1>
+                    {% block page_heading %}
+                        Human Resources
+                    {% endblock %}
+                </h1>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <div class="header-date">
+
+                    <span class="date-icon">◷</span>
+
+                    <span id="current-date"></span>
+
+                </div>
+
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        HR
+                    </div>
+
+                    <div class="profile-info">
+
+                        <strong>HR Administrator</strong>
+
+                        <span>Human Resources</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <section id="content-area">
+
+            {% block content %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        HR
+                    </div>
+
+                    <h2>
+                        Welcome to SmartLeave
+                    </h2>
+
+                    <p>
+                        Select an option from the sidebar
+                        to manage your organization.
+                    </p>
+
+                </div>
+
+            {% endblock %}
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer class="dashboard-footer">
+
+            <span>
+                © 2026 SmartLeave Management System
+            </span>
+
+            <span>
+                HR Portal
+            </span>
+
+        </footer>
+
+
+    </main>
+
+</div>
+
+
+ 
+
+<script>
+
+    /* Flash message */
+
+    setTimeout(function () {
+
+        const flashContainer =
+            document.getElementById('flash-container');
+
+        if (flashContainer) {
+
+            flashContainer.style.transition =
+                'opacity 0.5s ease, transform 0.5s ease';
+
+            flashContainer.style.opacity = '0';
+
+            flashContainer.style.transform =
+                'translateY(-10px)';
+
+            setTimeout(function () {
+
+                flashContainer.remove();
+
+            }, 500);
+
+        }
+
+    }, 3000);
+
+
+    /* Current date */
+
+    const dateElement =
+        document.getElementById('current-date');
+
+    if (dateElement) {
+
+        const today = new Date();
+
+        dateElement.textContent =
+            today.toLocaleDateString(
+                'en-IN',
+                {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                }
+            );
+
+    }
+
+</script>
+
 
 </body>
+
 </html>

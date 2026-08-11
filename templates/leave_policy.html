@@ -1,35 +1,59 @@
 {% extends "hr_dashboard.html" %}
-{% block title %}Leave Policy{% endblock %}
+
+{% block title %}Leave Policy Management{% endblock %}
 
 {% block content %}
 
 <style>
 
-/* Section Styling */
+/* =========================
+   PAGE
+========================= */
+
+.policy-container {
+    padding: 10px;
+}
+
+.policy-container h2 {
+    margin-bottom: 10px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 25px;
+    text-decoration: none;
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
 .section {
     background: white;
     padding: 20px;
     margin-bottom: 30px;
-    border-radius: 8px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
-/* Headings */
-h2 {
-    margin-bottom: 20px;
+.section h3 {
+    margin-bottom: 18px;
 }
 
-h3 {
-    margin-bottom: 15px;
-}
 
-/* Table */
+/* =========================
+   TABLE
+========================= */
+
 table {
     width: 100%;
     border-collapse: collapse;
 }
 
-th, td {
-    padding: 10px;
+th,
+td {
+    padding: 12px;
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
@@ -43,150 +67,431 @@ tr:hover {
     background-color: #f5f5f5;
 }
 
-/* Form Grid */
+
+/* =========================
+   FORM
+========================= */
+
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    gap: 18px;
 }
 
-/* Inputs */
-input, select {
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+input,
+select {
     width: 100%;
-    padding: 6px;
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
 }
 
-/* Checkbox group */
+
+/* =========================
+   CHECKBOX
+========================= */
+
 .checkbox-group {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-/* Button */
+.checkbox-group input {
+    width: auto;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
 button {
     background-color: #007bff;
     color: white;
-    padding: 10px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
-    margin-top: 15px;
+    margin-top: 20px;
+    font-weight: 600;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
+
+/* =========================
+   STATUS
+========================= */
+
+.yes {
+    color: green;
+    font-weight: bold;
+}
+
+.no {
+    color: red;
+    font-weight: bold;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    table {
+        font-size: 13px;
+    }
+
+}
+
 </style>
+
+<div class="policy-container">
+
 
 <h2>Leave Policy Management</h2>
 
-<a href="{{ url_for('hr_dashboard') }}" class="back-link">&larr; Back to hr dashboard</a>
+<a href="{{ url_for('hr_dashboard') }}" class="back-link">
+    &larr; Back to HR Dashboard
+</a>
 
 
-<!-- 🔝 EXISTING POLICIES -->
+<!-- =====================================================
+     LEAVE POLICIES TABLE
+====================================================== -->
+
 <div class="section">
 
-    <h3>Existing Policies</h3>
+    <h3>Existing Leave Policies</h3>
 
     <table>
-        <tr>
-            <th>Leave Type</th>
-            <th>Total Leaves</th>
-            <th>Max / Month</th>
-            <th>Min Notice</th>
-            <th>Half Day</th>
-        </tr>
 
-        {% for p in policies %}
-        <tr>
-            <td>{{ p.leave_type }}</td>
-            <td>{{ p.total_leaves }}</td>
-            <td>{{ p.max_per_month }}</td>
-            <td>{{ p.min_notice_days }}</td>
-            <td>
-                {% if p.allow_half_day %}
-                    ✔
-                {% else %}
-                    ✖
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>Leave Type</th>
+                <th>Total Leaves</th>
+                <th>Max / Month</th>
+                <th>Min Notice</th>
+                <th>Half Day</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for p in policies %}
+
+            <tr>
+
+                <td>
+                    {{ p.leave_type }}
+                </td>
+
+                <td>
+                    {{ p.total_leaves }}
+                </td>
+
+                <td>
+                    {% if p.max_per_month is not none %}
+                        {{ p.max_per_month }}
+                    {% else %}
+                        No Limit
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if p.min_notice_days is not none %}
+                        {{ p.min_notice_days }} days
+                    {% else %}
+                        No Notice
+                    {% endif %}
+                </td>
+
+                <td>
+
+                    {% if p.allow_half_day %}
+                        <span class="yes">✔ Allowed</span>
+                    {% else %}
+                        <span class="no">✖ Not Allowed</span>
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% else %}
+
+            <tr>
+                <td colspan="5">
+                    No leave policies found.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
     </table>
 
 </div>
 
-<!-- 🔽 ADD / UPDATE POLICY FORM -->
+
+<!-- =====================================================
+     SYSTEM RULES TABLE
+====================================================== -->
+
+<div class="section">
+
+    <h3>Current System Rules</h3>
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>Maximum Department Leave</th>
+                <th>Exclude Weekends</th>
+                <th>Exclude Holidays</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+
+                <td>
+                    {{ system_rules.max_department_leave_percent }}%
+                </td>
+
+                <td>
+
+                    {% if system_rules.exclude_weekends %}
+                        <span class="yes">✔ Yes</span>
+                    {% else %}
+                        <span class="no">✖ No</span>
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {% if system_rules.exclude_holidays %}
+                        <span class="yes">✔ Yes</span>
+                    {% else %}
+                        <span class="no">✖ No</span>
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+<!-- =====================================================
+     ADD / UPDATE LEAVE POLICY
+====================================================== -->
+
 <div class="section">
 
     <h3>Add / Update Leave Policy</h3>
 
-    <form method="POST">
+    <form method="POST"
+          action="{{ url_for('save_leave_policy') }}">
 
         <div class="form-grid">
 
-            <div>
+            <div class="form-group">
+
                 <label>Leave Type:</label>
+
                 <select name="leave_type" required>
-                    <option value="casual leave">Casual Leave</option>
-                    <option value="sick leave">Sick Leave</option>
-                    <option value="earned leave">Earned Leave</option>
+
+                    <option value="casual leave">
+                        Casual Leave
+                    </option>
+
+                    <option value="sick leave">
+                        Sick Leave
+                    </option>
+
+                    <option value="earned leave">
+                        Earned Leave
+                    </option>
+
                 </select>
+
             </div>
 
-            <div>
+
+            <div class="form-group">
+
                 <label>Total Leaves (Yearly):</label>
-                <input type="number" name="total_leaves" required>
+
+                <input
+                    type="number"
+                    name="total_leaves"
+                    min="0"
+                    required
+                >
+
             </div>
 
-            <div>
+
+            <div class="form-group">
+
                 <label>Max Leaves Per Month:</label>
-                <input type="number" name="max_per_month">
+
+                <input
+                    type="number"
+                    name="max_per_month"
+                    min="0"
+                >
+
             </div>
 
-            <div>
+
+            <div class="form-group">
+
                 <label>Minimum Notice Days:</label>
-                <input type="number" name="min_notice_days">
+
+                <input
+                    type="number"
+                    name="min_notice_days"
+                    min="0"
+                >
+
             </div>
 
+
             <div class="checkbox-group">
-                <input type="checkbox" name="allow_half_day" value="1">
-                <label>Allow Half Day</label>
+
+                <input
+                    type="checkbox"
+                    name="allow_half_day"
+                    value="1"
+                >
+
+                <label>
+                    Allow Half Day
+                </label>
+
             </div>
 
         </div>
 
-        <hr>
 
-        <h3>System Rules</h3>
-
-        <div class="form-grid">
-
-            <div>
-                <label>Max Department Leave %:</label>
-                <input type="number" name="max_department_leave_percent"
-                       value="{{ system_rules.max_department_leave_percent }}">
-            </div>
-
-            <div class="checkbox-group">
-                <input type="checkbox" name="exclude_weekends" value="1"
-                    {% if system_rules.exclude_weekends %}checked{% endif %}>
-                <label>Exclude Weekends</label>
-            </div>
-
-            <div class="checkbox-group">
-                <input type="checkbox" name="exclude_holidays" value="1"
-                    {% if system_rules.exclude_holidays %}checked{% endif %}>
-                <label>Exclude Holidays</label>
-            </div>
-
-        </div>
-
-        <button type="submit">Save Policy</button>
+        <button type="submit">
+            Save Leave Policy
+        </button>
 
     </form>
+
+</div>
+
+
+
+
+<!-- =====================================================
+     SYSTEM RULES FORM
+====================================================== -->
+
+<div class="section">
+
+    <h3>Update System Rules</h3>
+
+    <form method="POST"
+          action="{{ url_for('save_system_rules') }}">
+
+        <div class="form-grid">
+
+
+            <div class="form-group">
+
+                <label>
+                    Max Department Leave (%):
+                </label>
+
+                <input
+                    type="number"
+                    name="max_department_leave_percent"
+                    min="1"
+                    max="100"
+                    value="{{ system_rules.max_department_leave_percent }}"
+                    required
+                >
+
+            </div>
+
+
+            <div class="checkbox-group">
+
+                <input
+                    type="checkbox"
+                    name="exclude_weekends"
+                    value="1"
+                    {% if system_rules.exclude_weekends %}
+                        checked
+                    {% endif %}
+                >
+
+                <label>
+                    Exclude Weekends
+                </label>
+
+            </div>
+
+
+            <div class="checkbox-group">
+
+                <input
+                    type="checkbox"
+                    name="exclude_holidays"
+                    value="1"
+                    {% if system_rules.exclude_holidays %}
+                        checked
+                    {% endif %}
+                >
+
+                <label>
+                    Exclude Public Holidays
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <button type="submit">
+            Save System Rules
+        </button>
+
+    </form>
+
+</div>
+
 
 </div>
 

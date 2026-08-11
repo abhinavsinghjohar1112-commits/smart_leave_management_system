@@ -728,7 +728,7 @@ def cancel_leave(leave_id):
      
 
 
-@app.route('/jwieiiuiu')
+@app.route('/employee_leaves')
 def employee_leaves():
     if 'employeeid' not in session:
         flash("please login first")
@@ -751,7 +751,7 @@ def employee_leaves():
 
 
 
-@app.route('/hwiwwjdjw')
+@app.route('/hr_leaves')
 def hr_leaves():
     if 'employeeid' not in session:
         flash("please login first")
@@ -774,7 +774,7 @@ def hr_leaves():
 
 
 
-@app.route('/manager_llll')
+@app.route('/manager_leaves')
 def manager_leaves():
     if 'employeeid' not in session:
         flash("please login first")
@@ -1154,62 +1154,248 @@ def assign_manager():
 
 
 
-@app.route('/leave_policy', methods=['GET', 'POST'])
+ 
+
+@app.route('/leave_policy')
+@hr_required
 def leave_policy():
-    conn = connect_to_db()
-    cursor = conn.cursor(dictionary=True)
 
-    if request.method == 'POST':
 
-        # -------- LEAVE POLICY --------
-        leave_type = request.form['leave_type']
-        total_leaves = request.form['total_leaves']
-        max_per_month = request.form.get('max_per_month')
-        min_notice_days = request.form.get('min_notice_days', 0)
+ conn = connect_to_db()
+ cursor = conn.cursor(dictionary=True)
 
-        allow_half_day = request.form.get('allow_half_day', 0)
+# Get all leave policies
+ cursor.execute("""
+    SELECT
+        leave_type,
+        total_leaves,
+        max_per_month,
+        min_notice_days,
+        allow_half_day
+    FROM leave_policy
+    ORDER BY leave_type
+""")
 
-        cursor.execute("""
-INSERT INTO leave_policy 
-(leave_type, total_leaves, max_per_month, min_notice_days, allow_half_day)
-VALUES (%s, %s, %s, %s, %s)
-ON DUPLICATE KEY UPDATE
-total_leaves=%s,
-max_per_month=%s,
-min_notice_days=%s,
-allow_half_day=%s
-""", (
-    leave_type, total_leaves, max_per_month, min_notice_days, allow_half_day,
-    total_leaves, max_per_month, min_notice_days, allow_half_day
-))
+ policies = cursor.fetchall()
 
-        # -------- SYSTEM RULES --------
-        max_percent = request.form.get('max_department_leave_percent')
-        exclude_weekends = request.form.get('exclude_weekends')
-        exclude_holidays = request.form.get('exclude_holidays')
 
-        cursor.execute("""
-UPDATE system_rules
-SET max_department_leave_percent=%s,
-    exclude_weekends=%s,
-    exclude_holidays=%s
-WHERE id=1
-""", (max_percent, exclude_weekends, exclude_holidays))
+# Get system rules
+ cursor.execute("""
+    SELECT
+        id,
+        max_department_leave_percent,
+        exclude_weekends,
+        exclude_holidays
+    FROM system_rules
+    ORDER BY id
+    LIMIT 1
+""")
 
-        conn.commit()
+ system_rules = cursor.fetchone()
 
-    # Fetch data
-    cursor.execute("SELECT * FROM leave_policy")
-    policies = cursor.fetchall()
 
-    cursor.execute("SELECT * FROM system_rules WHERE id=1")
-    system_rules = cursor.fetchone()
+# If no system rule exists yet
+ if system_rules is None:
+    system_rules = {
+        'id': None,
+        'max_department_leave_percent': 30,
+        'exclude_weekends': 1,
+        'exclude_holidays': 1
+    }
 
-    return render_template(
-        'leave_policy.html',
-        policies=policies,
-        system_rules=system_rules
+
+ cursor.close()
+ conn.close()
+
+ return render_template(
+    'leave_policy.html',
+    policies=policies,
+    system_rules=system_rules
+)
+ 
+
+@app.route('/save_leave_policy', methods=['POST'])
+@hr_required
+def save_leave_policy():
+
+
+ leave_type = request.form.get('leave_type')
+ total_leaves = request.form.get('total_leaves')
+ max_per_month = request.form.get('max_per_month') or None
+ min_notice_days = request.form.get('min_notice_days') or 0
+
+# Checkbox
+ allow_half_day = 1 if request.form.get('allow_half_day') else 0
+
+
+ conn = connect_to_db()
+ cursor = conn.cursor()
+
+
+# Because leave_type is PRIMARY KEY,
+# check whether this leave type already exists.
+ cursor.execute("""
+    SELECT leave_type
+    FROM leave_policy
+    WHERE leave_type = %s
+""", (leave_type,))
+
+ existing = cursor.fetchone()
+
+
+ if existing:
+
+    # -------------------------
+    # UPDATE EXISTING POLICY
+    # -------------------------
+
+    cursor.execute("""
+        UPDATE leave_policy
+        SET
+            total_leaves = %s,
+            max_per_month = %s,
+            min_notice_days = %s,
+            allow_half_day = %s
+        WHERE leave_type = %s
+    """, (
+        total_leaves,
+        max_per_month,
+        min_notice_days,
+        allow_half_day,
+        leave_type
+    ))
+
+    flash(
+        f"{leave_type.title()} policy updated successfully.",
+        "success"
     )
+
+ else:
+
+    # -------------------------
+    # INSERT NEW POLICY
+    # -------------------------
+
+    cursor.execute("""
+        INSERT INTO leave_policy
+        (
+            leave_type,
+            total_leaves,
+            max_per_month,
+            min_notice_days,
+            allow_half_day
+        )
+        VALUES (%s, %s, %s, %s, %s)
+    """, (
+        leave_type,
+        total_leaves,
+        max_per_month,
+        min_notice_days,
+        allow_half_day
+    ))
+
+    flash(
+        f"{leave_type.title()} policy added successfully.",
+        "success"
+    )
+
+
+ conn.commit()
+
+ cursor.close()
+ conn.close()
+
+ return redirect(url_for('leave_policy'))
+
+
+ 
+@app.route('/save_system_rules', methods=['POST'])
+@hr_required
+def save_system_rules():
+
+
+ max_department_leave_percent = request.form.get(
+    'max_department_leave_percent'
+)
+
+# Checkbox values
+ exclude_weekends = (
+    1 if request.form.get('exclude_weekends') else 0
+)
+
+ exclude_holidays = (
+    1 if request.form.get('exclude_holidays') else 0
+)
+
+
+ conn = connect_to_db()
+ cursor = conn.cursor()
+
+
+# Get existing system rule
+ cursor.execute("""
+    SELECT id
+    FROM system_rules
+    ORDER BY id
+    LIMIT 1
+""")
+
+ existing = cursor.fetchone()
+
+
+ if existing:
+
+    # -------------------------
+    # UPDATE SYSTEM RULES
+    # -------------------------
+
+    cursor.execute("""
+        UPDATE system_rules
+        SET
+            max_department_leave_percent = %s,
+            exclude_weekends = %s,
+            exclude_holidays = %s
+        WHERE id = %s
+    """, (
+        max_department_leave_percent,
+        exclude_weekends,
+        exclude_holidays,
+        existing[0]
+    ))
+
+ else:
+
+    # -------------------------
+    # INSERT SYSTEM RULES
+    # -------------------------
+
+    cursor.execute("""
+        INSERT INTO system_rules
+        (
+            max_department_leave_percent,
+            exclude_weekends,
+            exclude_holidays
+        )
+        VALUES (%s, %s, %s)
+    """, (
+        max_department_leave_percent,
+        exclude_weekends,
+        exclude_holidays
+    ))
+
+
+ conn.commit()
+
+ cursor.close()
+ conn.close()
+
+ flash(
+    "System rules updated successfully.",
+    "success"
+)
+
+ return redirect(url_for('leave_policy'))
+
 
  
 
