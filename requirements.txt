@@ -6,3 +6,4 @@ mysql-connector-python
 Werkzeug
 python-dotenv
 gunicorn
+email-validator
