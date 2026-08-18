@@ -941,7 +941,7 @@ def hr_dashboard():
     cursor = conn.cursor(dictionary=True)
     
     cursor.execute("""
-       SELECT COUNT(*) as total_employees FROM signupdata WHERE position='employee';
+       SELECT COUNT(*) as total_employees FROM signupdata WHERE position='employee' OR position='manager';
         
         """)
     result = cursor.fetchone()
