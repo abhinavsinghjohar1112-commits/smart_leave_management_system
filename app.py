@@ -1043,7 +1043,7 @@ def manage_employees():
         phone,
         is_active,
         manager_id
-    FROM signupdata
+    FROM signupdata WHERE position = 'employee' or  position='manager'
 """)
     employees = cursor.fetchall()
 
